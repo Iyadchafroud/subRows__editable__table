@@ -53,12 +53,13 @@ function EditableCell({
 }) {
   const [value, setValue] = React.useState(initialValue);
 
-  const onChange = (e) => {
+  const onChange = (row, e) => {
+    console.log({ cc: row, test: e.target.value });
     setValue(e.target.value);
   };
 
   const onBlur = () => {
-   const rowId=row.id 
+    const rowId = row.id;
 
     updateMyData(row.index, id, value, row.depth, rowId);
   };
@@ -74,7 +75,9 @@ function EditableCell({
   }
 
   if (row.subRows.length === 0) {
-    return <input value={value} onChange={onChange} onBlur={onBlur} />;
+    return (
+      <input value={value} onChange={(e) => onChange(row, e)} onBlur={onBlur} />
+    );
   }
 }
 
@@ -164,6 +167,7 @@ function Table({ columns, data, updateMyData, skipPageReset }) {
             type="number"
             defaultValue={pageIndex + 1}
             onChange={(e) => {
+              console.log(e.target);
               const page = e.target.value ? Number(e.target.value) - 1 : 0;
               gotoPage(page);
             }}
@@ -276,14 +280,15 @@ function App() {
   const [originalData] = React.useState(data);
   const [skipPageReset, setSkipPageReset] = React.useState(false);
 
-  const updateMyData = (rowIndex, columnId, value, deptht, designation) => {
-    // console.log(rowIndex, columnId, deptht, value);
+  const updateMyData = (rowIndex, columnId, value, deptht, rowId) => {
+    console.log(rowIndex, columnId, deptht, value, rowId);
 
     setSkipPageReset(true);
     setData((old) =>
       old.map((row, index) => {
+        console.log(row);
         if (index === rowIndex) {
-          // console.log(row);
+          console.log(index);
           row.subRows.map((el, indexSub) => {
             console.log(index, indexSub);
 
